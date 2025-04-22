@@ -1,0 +1,79 @@
+package service
+
+import (
+	"context"
+	"fmt"
+	"log"
+	"sync"
+	"time"
+
+	"github.com/google/uuid"
+	postProto "github.com/paper-social/notification-service/api/proto/gen/github.com/paper-social/notification-service/api/proto/post"
+	"github.com/paper-social/notification-service/internal/models"
+	"github.com/paper-social/notification-service/internal/queue"
+)
+
+// PostService implements the gRPC post service
+type PostService struct {
+	postProto.UnimplementedPostServiceServer
+	store *models.Store
+	queue *queue.NotificationQueue
+	mu    sync.Mutex
+}
+
+// NewPostService creates a new PostService
+func NewPostService(store *models.Store, queue *queue.NotificationQueue) *PostService {
+	return &PostService{
+		store: store,
+		queue: queue,
+	}
+}
+
+// PublishPost handles a new post and creates notifications for followers
+func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*postProto.NotificationResponse, error) {
+	log.Printf("Received PublishPost request for user %s", post.UserId)
+
+	// Convert proto post to internal post
+	internalPost := &models.Post{
+		ID:        post.Id,
+		UserID:    post.UserId,
+		Content:   post.Content,
+		CreatedAt: time.Now(),
+	}
+
+	// Store the post
+	s.mu.Lock()
+	s.store.Posts[internalPost.ID] = internalPost
+	s.mu.Unlock()
+
+	// Get followers of the post author
+	var followers []string
+	for _, val := range s.store.Follows {
+		if val.FolloweeID == post.UserId {
+			followers = append(followers, val.FollowerID)
+		}
+	}
+
+	log.Printf("Creating notifications for %d followers of user %s", len(followers), post.UserId)
+	// Create and queue notifications for each follower
+	for _, followerID := range followers {
+		notification := &models.Notification{
+			ID:           uuid.New().String(),
+			UserID:       followerID,
+			PostID:       post.Id,
+			PostAuthorID: post.UserId,
+			Content:      fmt.Sprintf("%s posted: %s", post.UserId, TruncateContent(post.Content, 50)),
+			Read:         false,
+			CreatedAt:    time.Now(),
+		}
+
+		// Queue the notification for delivery
+		s.queue.EnqueueNotification(notification)
+	}
+
+	return &postProto.NotificationResponse{
+		Success:             true,
+		Message:             fmt.Sprintf("Post published, %d notifications queued", len(followers)),
+		NotificationsQueued: int32(len(followers)),
+	}, nil
+}

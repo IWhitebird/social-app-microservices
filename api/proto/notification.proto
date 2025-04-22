@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package notification;
+
+option go_package = "github.com/paper-social/notification-service/api/proto/notification";
+
+
+service NotificationService {
+  rpc GetNotifications(UserId) returns (stream Notification);
+}
+
+message UserId {
+  string user_id = 1;
+}
+
+message Notification {
+  string id = 1;
+  string user_id = 2;
+  string post_id = 3;
+  string post_author_id = 4;
+  string content = 5;
+  bool read = 6;
+  int64 created_at = 7;
+}

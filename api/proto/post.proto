@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package post;
+
+option go_package = "github.com/paper-social/notification-service/api/proto/post";
+
+service PostService {
+    rpc PublishPost(Post) returns (NotificationResponse);
+}
+
+message Post {
+  string id = 1;
+  string user_id = 2;
+  string content = 3;
+}
+
+message NotificationResponse {
+  bool success = 1;
+  string message = 2;
+  int32 notifications_queued = 3;
+}

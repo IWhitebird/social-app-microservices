@@ -6,6 +6,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/graph-gophers/graphql-go"
 	notificationProto "github.com/paper-social/notification-service/api/proto/gen/github.com/paper-social/notification-service/api/proto/notification"
 	"github.com/paper-social/notification-service/internal/models"
 	"google.golang.org/grpc"
@@ -127,8 +128,8 @@ func (r *Resolver) getNotificationsFromStore(userID string) []*Notification {
 }
 
 // ID returns the notification ID
-func (n *Notification) ID() string {
-	return n.id
+func (n *Notification) ID() graphql.ID {
+	return graphql.ID(n.id)
 }
 
 // UserID returns the user ID

@@ -3,30 +3,15 @@ schema {
 }
 
 type Query {
-  # Get notifications for a user
   getNotifications(userID: String!): [Notification!]!
 }
 
-# Notification represents a notification sent to a user
 type Notification {
-  # Unique ID of the notification
   id: ID!
-  
-  # User ID who will receive the notification
   userID: String!
-  
-  # ID of the related post
   postID: String!
-  
-  # ID of the user who created the post
   postAuthorID: String!
-  
-  # Content of the notification
   content: String!
-  
-  # Whether the notification has been read
   read: Boolean!
-  
-  # When the notification was created (ISO-8601 format)
   createdAt: String!
 } 

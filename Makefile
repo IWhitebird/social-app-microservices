@@ -3,17 +3,12 @@
 all: clean build
 
 build:
-	@echo "Building server and client..."
+	@echo "Building server..."
 	go build -o cmd/server/server cmd/server/main.go
-	go build -o cmd/client/client cmd/client/main.go
 
 run:
 	@echo "Running server..."
 	go run cmd/server/main.go
-
-client:
-	@echo "Running client with user u1..."
-	go run cmd/client/main.go u1
 
 test:
 	@echo "Running tests..."
@@ -21,7 +16,7 @@ test:
 
 clean:
 	@echo "Cleaning..."
-	rm -f cmd/server/server cmd/client/client
+	rm -f cmd/server/server
 
 docker:
 	@echo "Building Docker image..."

@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	postProto "github.com/paper-social/notification-service/api/proto/gen/github.com/paper-social/notification-service/api/proto/post"
 	"github.com/paper-social/notification-service/internal/models"
 	"github.com/paper-social/notification-service/internal/queue"
+	postProto "github.com/paper-social/notification-service/proto/generated/post/proto"
 )
 
 // PostService implements the gRPC post service

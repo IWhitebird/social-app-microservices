@@ -2,9 +2,9 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v6.31.0--rc1
-// source: api/proto/post.proto
+// source: proto/post.proto
 
-package post
+package proto
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -32,7 +32,7 @@ type Post struct {
 
 func (x *Post) Reset() {
 	*x = Post{}
-	mi := &file_api_proto_post_proto_msgTypes[0]
+	mi := &file_proto_post_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +44,7 @@ func (x *Post) String() string {
 func (*Post) ProtoMessage() {}
 
 func (x *Post) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_post_proto_msgTypes[0]
+	mi := &file_proto_post_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +57,7 @@ func (x *Post) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Post.ProtoReflect.Descriptor instead.
 func (*Post) Descriptor() ([]byte, []int) {
-	return file_api_proto_post_proto_rawDescGZIP(), []int{0}
+	return file_proto_post_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Post) GetId() string {
@@ -92,7 +92,7 @@ type NotificationResponse struct {
 
 func (x *NotificationResponse) Reset() {
 	*x = NotificationResponse{}
-	mi := &file_api_proto_post_proto_msgTypes[1]
+	mi := &file_proto_post_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +104,7 @@ func (x *NotificationResponse) String() string {
 func (*NotificationResponse) ProtoMessage() {}
 
 func (x *NotificationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_post_proto_msgTypes[1]
+	mi := &file_proto_post_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,7 +117,7 @@ func (x *NotificationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NotificationResponse.ProtoReflect.Descriptor instead.
 func (*NotificationResponse) Descriptor() ([]byte, []int) {
-	return file_api_proto_post_proto_rawDescGZIP(), []int{1}
+	return file_proto_post_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *NotificationResponse) GetSuccess() bool {
@@ -141,11 +141,11 @@ func (x *NotificationResponse) GetNotificationsQueued() int32 {
 	return 0
 }
 
-var File_api_proto_post_proto protoreflect.FileDescriptor
+var File_proto_post_proto protoreflect.FileDescriptor
 
-const file_api_proto_post_proto_rawDesc = "" +
+const file_proto_post_proto_rawDesc = "" +
 	"\n" +
-	"\x14api/proto/post.proto\x12\x04post\"I\n" +
+	"\x10proto/post.proto\x12\x04post\"I\n" +
 	"\x04Post\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
@@ -156,26 +156,26 @@ const file_api_proto_post_proto_rawDesc = "" +
 	"\x14notifications_queued\x18\x03 \x01(\x05R\x13notificationsQueued2D\n" +
 	"\vPostService\x125\n" +
 	"\vPublishPost\x12\n" +
-	".post.Post\x1a\x1a.post.NotificationResponseB=Z;github.com/paper-social/notification-service/api/proto/postb\x06proto3"
+	".post.Post\x1a\x1a.post.NotificationResponseBIZGgithub.com/paper-social/notification-service/proto/generated/post/protob\x06proto3"
 
 var (
-	file_api_proto_post_proto_rawDescOnce sync.Once
-	file_api_proto_post_proto_rawDescData []byte
+	file_proto_post_proto_rawDescOnce sync.Once
+	file_proto_post_proto_rawDescData []byte
 )
 
-func file_api_proto_post_proto_rawDescGZIP() []byte {
-	file_api_proto_post_proto_rawDescOnce.Do(func() {
-		file_api_proto_post_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_proto_post_proto_rawDesc), len(file_api_proto_post_proto_rawDesc)))
+func file_proto_post_proto_rawDescGZIP() []byte {
+	file_proto_post_proto_rawDescOnce.Do(func() {
+		file_proto_post_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_post_proto_rawDesc), len(file_proto_post_proto_rawDesc)))
 	})
-	return file_api_proto_post_proto_rawDescData
+	return file_proto_post_proto_rawDescData
 }
 
-var file_api_proto_post_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_api_proto_post_proto_goTypes = []any{
+var file_proto_post_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_post_proto_goTypes = []any{
 	(*Post)(nil),                 // 0: post.Post
 	(*NotificationResponse)(nil), // 1: post.NotificationResponse
 }
-var file_api_proto_post_proto_depIdxs = []int32{
+var file_proto_post_proto_depIdxs = []int32{
 	0, // 0: post.PostService.PublishPost:input_type -> post.Post
 	1, // 1: post.PostService.PublishPost:output_type -> post.NotificationResponse
 	1, // [1:2] is the sub-list for method output_type
@@ -185,26 +185,26 @@ var file_api_proto_post_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_proto_post_proto_init() }
-func file_api_proto_post_proto_init() {
-	if File_api_proto_post_proto != nil {
+func init() { file_proto_post_proto_init() }
+func file_proto_post_proto_init() {
+	if File_proto_post_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_proto_post_proto_rawDesc), len(file_api_proto_post_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_post_proto_rawDesc), len(file_proto_post_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_proto_post_proto_goTypes,
-		DependencyIndexes: file_api_proto_post_proto_depIdxs,
-		MessageInfos:      file_api_proto_post_proto_msgTypes,
+		GoTypes:           file_proto_post_proto_goTypes,
+		DependencyIndexes: file_proto_post_proto_depIdxs,
+		MessageInfos:      file_proto_post_proto_msgTypes,
 	}.Build()
-	File_api_proto_post_proto = out.File
-	file_api_proto_post_proto_goTypes = nil
-	file_api_proto_post_proto_depIdxs = nil
+	File_proto_post_proto = out.File
+	file_proto_post_proto_goTypes = nil
+	file_proto_post_proto_depIdxs = nil
 }

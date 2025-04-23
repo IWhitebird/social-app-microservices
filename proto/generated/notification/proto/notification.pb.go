@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v6.31.0--rc1
-// source: api/proto/notification.proto
+// source: proto/notification.proto
 
 package notification
 
@@ -30,7 +30,7 @@ type UserId struct {
 
 func (x *UserId) Reset() {
 	*x = UserId{}
-	mi := &file_api_proto_notification_proto_msgTypes[0]
+	mi := &file_proto_notification_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +42,7 @@ func (x *UserId) String() string {
 func (*UserId) ProtoMessage() {}
 
 func (x *UserId) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_notification_proto_msgTypes[0]
+	mi := &file_proto_notification_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +55,7 @@ func (x *UserId) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserId.ProtoReflect.Descriptor instead.
 func (*UserId) Descriptor() ([]byte, []int) {
-	return file_api_proto_notification_proto_rawDescGZIP(), []int{0}
+	return file_proto_notification_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *UserId) GetUserId() string {
@@ -80,7 +80,7 @@ type Notification struct {
 
 func (x *Notification) Reset() {
 	*x = Notification{}
-	mi := &file_api_proto_notification_proto_msgTypes[1]
+	mi := &file_proto_notification_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -92,7 +92,7 @@ func (x *Notification) String() string {
 func (*Notification) ProtoMessage() {}
 
 func (x *Notification) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_notification_proto_msgTypes[1]
+	mi := &file_proto_notification_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -105,7 +105,7 @@ func (x *Notification) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Notification.ProtoReflect.Descriptor instead.
 func (*Notification) Descriptor() ([]byte, []int) {
-	return file_api_proto_notification_proto_rawDescGZIP(), []int{1}
+	return file_proto_notification_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Notification) GetId() string {
@@ -157,11 +157,11 @@ func (x *Notification) GetCreatedAt() int64 {
 	return 0
 }
 
-var File_api_proto_notification_proto protoreflect.FileDescriptor
+var File_proto_notification_proto protoreflect.FileDescriptor
 
-const file_api_proto_notification_proto_rawDesc = "" +
+const file_proto_notification_proto_rawDesc = "" +
 	"\n" +
-	"\x1capi/proto/notification.proto\x12\fnotification\"!\n" +
+	"\x18proto/notification.proto\x12\fnotification\"!\n" +
 	"\x06UserId\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"\xc3\x01\n" +
 	"\fNotification\x12\x0e\n" +
@@ -174,26 +174,26 @@ const file_api_proto_notification_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\a \x01(\x03R\tcreatedAt2]\n" +
 	"\x13NotificationService\x12F\n" +
-	"\x10GetNotifications\x12\x14.notification.UserId\x1a\x1a.notification.Notification0\x01BEZCgithub.com/paper-social/notification-service/api/proto/notificationb\x06proto3"
+	"\x10GetNotifications\x12\x14.notification.UserId\x1a\x1a.notification.Notification0\x01BAZ?github.com/paper-social/notification-service/proto/notificationb\x06proto3"
 
 var (
-	file_api_proto_notification_proto_rawDescOnce sync.Once
-	file_api_proto_notification_proto_rawDescData []byte
+	file_proto_notification_proto_rawDescOnce sync.Once
+	file_proto_notification_proto_rawDescData []byte
 )
 
-func file_api_proto_notification_proto_rawDescGZIP() []byte {
-	file_api_proto_notification_proto_rawDescOnce.Do(func() {
-		file_api_proto_notification_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_api_proto_notification_proto_rawDesc), len(file_api_proto_notification_proto_rawDesc)))
+func file_proto_notification_proto_rawDescGZIP() []byte {
+	file_proto_notification_proto_rawDescOnce.Do(func() {
+		file_proto_notification_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_proto_notification_proto_rawDesc), len(file_proto_notification_proto_rawDesc)))
 	})
-	return file_api_proto_notification_proto_rawDescData
+	return file_proto_notification_proto_rawDescData
 }
 
-var file_api_proto_notification_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
-var file_api_proto_notification_proto_goTypes = []any{
+var file_proto_notification_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_notification_proto_goTypes = []any{
 	(*UserId)(nil),       // 0: notification.UserId
 	(*Notification)(nil), // 1: notification.Notification
 }
-var file_api_proto_notification_proto_depIdxs = []int32{
+var file_proto_notification_proto_depIdxs = []int32{
 	0, // 0: notification.NotificationService.GetNotifications:input_type -> notification.UserId
 	1, // 1: notification.NotificationService.GetNotifications:output_type -> notification.Notification
 	1, // [1:2] is the sub-list for method output_type
@@ -203,26 +203,26 @@ var file_api_proto_notification_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_api_proto_notification_proto_init() }
-func file_api_proto_notification_proto_init() {
-	if File_api_proto_notification_proto != nil {
+func init() { file_proto_notification_proto_init() }
+func file_proto_notification_proto_init() {
+	if File_proto_notification_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_proto_notification_proto_rawDesc), len(file_api_proto_notification_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_notification_proto_rawDesc), len(file_proto_notification_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_api_proto_notification_proto_goTypes,
-		DependencyIndexes: file_api_proto_notification_proto_depIdxs,
-		MessageInfos:      file_api_proto_notification_proto_msgTypes,
+		GoTypes:           file_proto_notification_proto_goTypes,
+		DependencyIndexes: file_proto_notification_proto_depIdxs,
+		MessageInfos:      file_proto_notification_proto_msgTypes,
 	}.Build()
-	File_api_proto_notification_proto = out.File
-	file_api_proto_notification_proto_goTypes = nil
-	file_api_proto_notification_proto_depIdxs = nil
+	File_proto_notification_proto = out.File
+	file_proto_notification_proto_goTypes = nil
+	file_proto_notification_proto_depIdxs = nil
 }

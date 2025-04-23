@@ -1,4 +1,4 @@
-.PHONY: all build run test clean docker docker-run
+.PHONY: all build run test clean docker docker-run gqlgen update-deps protogen
 
 all: clean build
 
@@ -9,6 +9,10 @@ build:
 run:
 	@echo "Running server..."
 	go run cmd/server/main.go
+
+gql:
+	@echo "Running gql server..."
+	go run cmd/gql/main.go
 
 test:
 	@echo "Running tests..."
@@ -26,9 +30,28 @@ docker-run:
 	@echo "Running Docker container..."
 	docker run -p 8080:8080 -p 50051:50051 paper-social/notification-service 
 
+# Usage: make protogen ${package_name}
 protogen:
 	@echo "Generating proto files..."
-	@rm -rf api/proto/gen
-	@mkdir -p api/proto/gen
-	protoc --go_out=api/proto/gen --go-grpc_out=api/proto/gen api/proto/*.proto
+	@PACKAGE_NAME=$(wordlist 2,2,$(MAKECMDGOALS)); \
+	if [ -z "$$PACKAGE_NAME" ]; then \
+		echo "Error: PACKAGE name is required. Usage: make protogen packagename"; \
+		exit 1; \
+	fi; \
+	rm -rf proto/generated/$$PACKAGE_NAME; \
+	mkdir -p proto/generated/$$PACKAGE_NAME; \
+	protoc --go_out=./proto/generated/$$PACKAGE_NAME --go-grpc_out=./proto/generated/$$PACKAGE_NAME \
+		--go_opt=paths=source_relative \
+		--go-grpc_opt=paths=source_relative \
+		proto/$$PACKAGE_NAME.proto
+
+gqlgen:
+	go run github.com/99designs/gqlgen generate
+
+update-deps:
+	go mod tidy
+
+# Allow passing arguments to protogen
+%:
+	@:
 

@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v6.31.0--rc1
-// source: api/proto/post.proto
+// source: proto/post.proto
 
-package post
+package proto
 
 import (
 	context "context"
@@ -117,5 +117,5 @@ var PostService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/proto/post.proto",
+	Metadata: "proto/post.proto",
 }

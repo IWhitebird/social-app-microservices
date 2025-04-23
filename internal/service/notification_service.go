@@ -1,12 +1,13 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"sync"
 
-	notificationProto "github.com/paper-social/notification-service/api/proto/gen/github.com/paper-social/notification-service/api/proto/notification"
 	"github.com/paper-social/notification-service/internal/models"
 	"github.com/paper-social/notification-service/internal/queue"
+	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
 )
 
 // NotificationService implements the gRPC notification service
@@ -52,7 +53,7 @@ func (s *NotificationService) GetNotifications(userId *notificationProto.UserId,
 			Read:         notification.Read,
 			CreatedAt:    notification.CreatedAt.Unix(),
 		}
-
+		fmt.Println(protoNotification)
 		// Send the notification
 		if err := stream.Send(protoNotification); err != nil {
 			log.Printf("Error sending notification: %v", err)

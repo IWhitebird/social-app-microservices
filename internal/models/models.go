@@ -67,11 +67,11 @@ func NewStore() *Store {
 
 func (s *Store) InitSampleData() {
 	users := []*User{
-		{ID: "u1", Username: "alice"},
-		{ID: "u2", Username: "bob"},
-		{ID: "u3", Username: "charlie"},
-		{ID: "u4", Username: "david"},
-		{ID: "u5", Username: "eve"},
+		{ID: "u1", Username: "alice", Followers: []string{"u2", "u3", "u4", "u5"}},
+		{ID: "u2", Username: "bob", Followers: []string{"u1", "u3", "u4", "u5"}},
+		{ID: "u3", Username: "charlie", Followers: []string{"u1", "u2", "u4", "u5"}},
+		{ID: "u4", Username: "david", Followers: []string{"u1", "u2", "u3", "u5"}},
+		{ID: "u5", Username: "eve", Followers: []string{"u1", "u2", "u3", "u4"}},
 	}
 
 	for _, u := range users {

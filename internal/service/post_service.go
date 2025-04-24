@@ -35,6 +35,7 @@ func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*p
 
 	// Convert proto post to internal post
 	internalPost := &models.Post{
+		ID:      uuid.New().String(),
 		UserID:  post.UserId,
 		Content: post.Content,
 	}
@@ -58,7 +59,7 @@ func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*p
 		notification := &models.Notification{
 			ID:        uuid.New().String(),
 			UserID:    followerID,
-			PostID:    post.Id,
+			PostID:    internalPost.ID,
 			Content:   fmt.Sprintf("%s posted: %s", post.UserId, TruncateContent(post.Content, 50)),
 			Read:      false,
 			CreatedAt: time.Now(),

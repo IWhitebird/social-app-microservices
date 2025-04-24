@@ -10,6 +10,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
+	"github.com/paper-social/notification-service/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -32,6 +33,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Mutation() MutationResolver
 	Query() QueryResolver
 }
 
@@ -39,13 +41,28 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	Mutation struct {
+		PublishPost func(childComplexity int, input model.PublishPostInput) int
+	}
+
 	Notification struct {
-		Content   func(childComplexity int) int
-		CreatedAt func(childComplexity int) int
-		ID        func(childComplexity int) int
-		PostID    func(childComplexity int) int
-		Read      func(childComplexity int) int
-		UserID    func(childComplexity int) int
+		Content func(childComplexity int) int
+		ID      func(childComplexity int) int
+		PostID  func(childComplexity int) int
+		Read    func(childComplexity int) int
+		UserID  func(childComplexity int) int
+	}
+
+	Post struct {
+		Content func(childComplexity int) int
+		ID      func(childComplexity int) int
+		UserID  func(childComplexity int) int
+	}
+
+	PostResponse struct {
+		Message             func(childComplexity int) int
+		NotificationsQueued func(childComplexity int) int
+		Success             func(childComplexity int) int
 	}
 
 	Query struct {
@@ -72,19 +89,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Mutation.publishPost":
+		if e.complexity.Mutation.PublishPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_publishPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.PublishPost(childComplexity, args["input"].(model.PublishPostInput)), true
+
 	case "Notification.content":
 		if e.complexity.Notification.Content == nil {
 			break
 		}
 
 		return e.complexity.Notification.Content(childComplexity), true
-
-	case "Notification.createdAt":
-		if e.complexity.Notification.CreatedAt == nil {
-			break
-		}
-
-		return e.complexity.Notification.CreatedAt(childComplexity), true
 
 	case "Notification.id":
 		if e.complexity.Notification.ID == nil {
@@ -114,6 +136,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Notification.UserID(childComplexity), true
 
+	case "Post.content":
+		if e.complexity.Post.Content == nil {
+			break
+		}
+
+		return e.complexity.Post.Content(childComplexity), true
+
+	case "Post.id":
+		if e.complexity.Post.ID == nil {
+			break
+		}
+
+		return e.complexity.Post.ID(childComplexity), true
+
+	case "Post.userID":
+		if e.complexity.Post.UserID == nil {
+			break
+		}
+
+		return e.complexity.Post.UserID(childComplexity), true
+
+	case "PostResponse.message":
+		if e.complexity.PostResponse.Message == nil {
+			break
+		}
+
+		return e.complexity.PostResponse.Message(childComplexity), true
+
+	case "PostResponse.notificationsQueued":
+		if e.complexity.PostResponse.NotificationsQueued == nil {
+			break
+		}
+
+		return e.complexity.PostResponse.NotificationsQueued(childComplexity), true
+
+	case "PostResponse.success":
+		if e.complexity.PostResponse.Success == nil {
+			break
+		}
+
+		return e.complexity.PostResponse.Success(childComplexity), true
+
 	case "Query.getNotifications":
 		if e.complexity.Query.GetNotifications == nil {
 			break
@@ -133,7 +197,9 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 	opCtx := graphql.GetOperationContext(ctx)
 	ec := executionContext{opCtx, e, 0, 0, make(chan graphql.DeferredResult)}
-	inputUnmarshalMap := graphql.BuildUnmarshalerMap()
+	inputUnmarshalMap := graphql.BuildUnmarshalerMap(
+		ec.unmarshalInputPublishPostInput,
+	)
 	first := true
 
 	switch opCtx.Operation.Operation {
@@ -166,6 +232,21 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			}
 
 			return &response
+		}
+	case ast.Mutation:
+		return func(ctx context.Context) *graphql.Response {
+			if !first {
+				return nil
+			}
+			first = false
+			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
+			data := ec._Mutation(ctx, opCtx.Operation.SelectionSet)
+			var buf bytes.Buffer
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
 		}
 
 	default:
@@ -215,11 +296,27 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "../schema.graphql", Input: `schema {
-  query: Query
+	{Name: "../gql/post.graphql", Input: `type Post {
+  id: ID!
+  userID: String!
+  content: String!
 }
 
-type Query {
+type PostResponse {
+  success: Boolean!
+  message: String!
+  notificationsQueued: Int!
+}
+
+type Mutation {
+  publishPost(input: PublishPostInput!): PostResponse!
+}
+
+input PublishPostInput {
+  userID: String!
+  content: String!
+} `, BuiltIn: false},
+	{Name: "../gql/notification.graphql", Input: `type Query {
   getNotifications(userID: String!): [Notification!]!
 }
 
@@ -229,7 +326,6 @@ type Notification {
   postID: String!
   content: String!
   read: Boolean!
-  createdAt: String!
 } `, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

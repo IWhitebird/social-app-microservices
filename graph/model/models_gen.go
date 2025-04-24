@@ -2,13 +2,32 @@
 
 package model
 
+type Mutation struct {
+}
+
 type Notification struct {
-	ID        string `json:"id"`
-	UserID    string `json:"userID"`
-	PostID    string `json:"postID"`
-	Content   string `json:"content"`
-	Read      bool   `json:"read"`
-	CreatedAt string `json:"createdAt"`
+	ID      string `json:"id"`
+	UserID  string `json:"userID"`
+	PostID  string `json:"postID"`
+	Content string `json:"content"`
+	Read    bool   `json:"read"`
+}
+
+type Post struct {
+	ID      string `json:"id"`
+	UserID  string `json:"userID"`
+	Content string `json:"content"`
+}
+
+type PostResponse struct {
+	Success             bool   `json:"success"`
+	Message             string `json:"message"`
+	NotificationsQueued int32  `json:"notificationsQueued"`
+}
+
+type PublishPostInput struct {
+	UserID  string `json:"userID"`
+	Content string `json:"content"`
 }
 
 type Query struct {

@@ -23,7 +23,6 @@ const (
 
 type Post struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -58,13 +57,6 @@ func (x *Post) ProtoReflect() protoreflect.Message {
 // Deprecated: Use Post.ProtoReflect.Descriptor instead.
 func (*Post) Descriptor() ([]byte, []int) {
 	return file_proto_post_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Post) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
 }
 
 func (x *Post) GetUserId() string {
@@ -145,9 +137,8 @@ var File_proto_post_proto protoreflect.FileDescriptor
 
 const file_proto_post_proto_rawDesc = "" +
 	"\n" +
-	"\x10proto/post.proto\x12\x04post\"I\n" +
-	"\x04Post\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\x10proto/post.proto\x12\x04post\"9\n" +
+	"\x04Post\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\"}\n" +
 	"\x14NotificationResponse\x12\x18\n" +

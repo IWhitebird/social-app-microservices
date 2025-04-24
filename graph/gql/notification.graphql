@@ -1,7 +1,3 @@
-schema {
-  query: Query
-}
-
 type Query {
   getNotifications(userID: String!): [Notification!]!
 }
@@ -12,5 +8,4 @@ type Notification {
   postID: String!
   content: String!
   read: Boolean!
-  createdAt: String!
 } 

@@ -83,6 +83,8 @@ func (x *Post) GetContent() string {
 
 type NotificationResponse struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
+	Success             bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message             string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	NotificationsQueued int32                  `protobuf:"varint,3,opt,name=notifications_queued,json=notificationsQueued,proto3" json:"notifications_queued,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
@@ -118,6 +120,20 @@ func (*NotificationResponse) Descriptor() ([]byte, []int) {
 	return file_proto_post_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *NotificationResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *NotificationResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 func (x *NotificationResponse) GetNotificationsQueued() int32 {
 	if x != nil {
 		return x.NotificationsQueued
@@ -133,8 +149,10 @@ const file_proto_post_proto_rawDesc = "" +
 	"\x04Post\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
-	"\acontent\x18\x03 \x01(\tR\acontent\"I\n" +
-	"\x14NotificationResponse\x121\n" +
+	"\acontent\x18\x03 \x01(\tR\acontent\"}\n" +
+	"\x14NotificationResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x121\n" +
 	"\x14notifications_queued\x18\x03 \x01(\x05R\x13notificationsQueued2D\n" +
 	"\vPostService\x125\n" +
 	"\vPublishPost\x12\n" +

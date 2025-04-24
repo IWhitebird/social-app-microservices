@@ -60,7 +60,7 @@ func RunHTTPServer() {
 	}
 
 	// Create and start the HTTP server
-	server := api.NewApiServer(store, port)
+	server := api.NewHttpApi(store, port)
 	log.Println("Starting HTTP server on http://localhost:" + port)
 	if err := server.Start(); err != nil {
 		log.Fatalf("Failed to start HTTP server: %v", err)

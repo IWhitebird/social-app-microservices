@@ -39,9 +39,9 @@ type Notification struct {
 
 // Metrics related structs
 type NotificationMetrics struct {
-	TotalNotificationsSent int           `json:"total_notifications_sent"`
-	FailedAttempts         int           `json:"failed_attempts"`
-	AverageDeliveryTime    time.Duration `json:"average_delivery_time"`
+	TotalNotificationsSent int     `json:"total_notifications_sent"`
+	FailedAttempts         int     `json:"failed_attempts"`
+	AverageDeliveryTime    float64 `json:"average_delivery_time"` // in milliseconds
 }
 
 type Store struct {

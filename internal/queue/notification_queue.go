@@ -152,8 +152,8 @@ func (q *NotificationQueue) processNotification(job NotificationJob) bool {
 	}
 
 	// Simulation of successful delivery
-	log.Printf("Notification sent to user %s for post %s (by %s)",
-		notification.UserID, notification.PostID, notification.PostAuthorID)
+	log.Printf("Notification sent to user %s for post %s",
+		notification.UserID, notification.PostID)
 
 	// Store notification in user's list
 	q.metrics.mu.Lock()

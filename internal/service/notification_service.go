@@ -45,13 +45,12 @@ func (s *NotificationService) GetNotifications(userId *notificationProto.UserId,
 	for _, notification := range userNotifications {
 		// Convert internal notification to proto notification
 		protoNotification := &notificationProto.Notification{
-			Id:           notification.ID,
-			UserId:       notification.UserID,
-			PostId:       notification.PostID,
-			PostAuthorId: notification.PostAuthorID,
-			Content:      notification.Content,
-			Read:         notification.Read,
-			CreatedAt:    notification.CreatedAt.Unix(),
+			Id:        notification.ID,
+			UserId:    notification.UserID,
+			PostId:    notification.PostID,
+			Content:   notification.Content,
+			Read:      notification.Read,
+			CreatedAt: notification.CreatedAt.Unix(),
 		}
 		fmt.Println(protoNotification)
 		// Send the notification

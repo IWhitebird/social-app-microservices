@@ -35,22 +35,20 @@ func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*p
 
 	// Convert proto post to internal post
 	internalPost := &models.Post{
-		ID:        post.Id,
-		UserID:    post.UserId,
-		Content:   post.Content,
-		CreatedAt: time.Now(),
+		UserID:  post.UserId,
+		Content: post.Content,
 	}
 
 	// Store the post
 	s.mu.Lock()
-	s.store.Posts[internalPost.ID] = internalPost
+	s.store.Posts[internalPost.UserID] = internalPost
 	s.mu.Unlock()
 
 	// Get followers of the post author
 	var followers []string
-	for _, val := range s.store.Follows {
-		if val.FolloweeID == post.UserId {
-			followers = append(followers, val.FollowerID)
+	for _, val := range s.store.Users {
+		if val.ID == post.UserId {
+			followers = val.Followers
 		}
 	}
 
@@ -58,13 +56,12 @@ func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*p
 	// Create and queue notifications for each follower
 	for _, followerID := range followers {
 		notification := &models.Notification{
-			ID:           uuid.New().String(),
-			UserID:       followerID,
-			PostID:       post.Id,
-			PostAuthorID: post.UserId,
-			Content:      fmt.Sprintf("%s posted: %s", post.UserId, TruncateContent(post.Content, 50)),
-			Read:         false,
-			CreatedAt:    time.Now(),
+			ID:        uuid.New().String(),
+			UserID:    followerID,
+			PostID:    post.Id,
+			Content:   fmt.Sprintf("%s posted: %s", post.UserId, TruncateContent(post.Content, 50)),
+			Read:      false,
+			CreatedAt: time.Now(),
 		}
 
 		// Queue the notification for delivery

@@ -10,10 +10,6 @@ run:
 	@echo "Running server..."
 	go run cmd/server/main.go
 
-gql:
-	@echo "Running gql server..."
-	go run cmd/gql/main.go
-
 test:
 	@echo "Running tests..."
 	go test ./... -v

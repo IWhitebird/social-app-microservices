@@ -14,10 +14,6 @@ test:
 	@echo "Running tests..."
 	go test ./... -v
 
-clean:
-	@echo "Cleaning..."
-	rm -f cmd/server/server
-
 docker:
 	@echo "Building Docker image..."
 	docker build -t paper-social/notification-service .

@@ -10,7 +10,6 @@ type Notification {
   id: ID!
   userID: String!
   postID: String!
-  postAuthorID: String!
   content: String!
   read: Boolean!
   createdAt: String!

@@ -17,8 +17,7 @@ message Notification {
   string id = 1;
   string user_id = 2;
   string post_id = 3;
-  string post_author_id = 4;
-  string content = 5;
-  bool read = 6;
-  int64 created_at = 7;
+  string content = 4;
+  bool read = 5;
+  int64 created_at = 6;
 }

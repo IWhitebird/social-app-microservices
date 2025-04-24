@@ -3,13 +3,12 @@
 package model
 
 type Notification struct {
-	ID           string `json:"id"`
-	UserID       string `json:"userID"`
-	PostID       string `json:"postID"`
-	PostAuthorID string `json:"postAuthorID"`
-	Content      string `json:"content"`
-	Read         bool   `json:"read"`
-	CreatedAt    string `json:"createdAt"`
+	ID        string `json:"id"`
+	UserID    string `json:"userID"`
+	PostID    string `json:"postID"`
+	Content   string `json:"content"`
+	Read      bool   `json:"read"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type Query struct {

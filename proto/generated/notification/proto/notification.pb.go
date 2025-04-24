@@ -4,7 +4,7 @@
 // 	protoc        v6.31.0--rc1
 // source: proto/notification.proto
 
-package notification
+package proto
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -70,10 +70,9 @@ type Notification struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	PostId        string                 `protobuf:"bytes,3,opt,name=post_id,json=postId,proto3" json:"post_id,omitempty"`
-	PostAuthorId  string                 `protobuf:"bytes,4,opt,name=post_author_id,json=postAuthorId,proto3" json:"post_author_id,omitempty"`
-	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	Read          bool                   `protobuf:"varint,6,opt,name=read,proto3" json:"read,omitempty"`
-	CreatedAt     int64                  `protobuf:"varint,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty"`
+	Read          bool                   `protobuf:"varint,5,opt,name=read,proto3" json:"read,omitempty"`
+	CreatedAt     int64                  `protobuf:"varint,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -129,13 +128,6 @@ func (x *Notification) GetPostId() string {
 	return ""
 }
 
-func (x *Notification) GetPostAuthorId() string {
-	if x != nil {
-		return x.PostAuthorId
-	}
-	return ""
-}
-
 func (x *Notification) GetContent() string {
 	if x != nil {
 		return x.Content
@@ -163,18 +155,17 @@ const file_proto_notification_proto_rawDesc = "" +
 	"\n" +
 	"\x18proto/notification.proto\x12\fnotification\"!\n" +
 	"\x06UserId\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"\xc3\x01\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x9d\x01\n" +
 	"\fNotification\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x17\n" +
-	"\apost_id\x18\x03 \x01(\tR\x06postId\x12$\n" +
-	"\x0epost_author_id\x18\x04 \x01(\tR\fpostAuthorId\x12\x18\n" +
-	"\acontent\x18\x05 \x01(\tR\acontent\x12\x12\n" +
-	"\x04read\x18\x06 \x01(\bR\x04read\x12\x1d\n" +
+	"\apost_id\x18\x03 \x01(\tR\x06postId\x12\x18\n" +
+	"\acontent\x18\x04 \x01(\tR\acontent\x12\x12\n" +
+	"\x04read\x18\x05 \x01(\bR\x04read\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\a \x01(\x03R\tcreatedAt2]\n" +
+	"created_at\x18\x06 \x01(\x03R\tcreatedAt2]\n" +
 	"\x13NotificationService\x12F\n" +
-	"\x10GetNotifications\x12\x14.notification.UserId\x1a\x1a.notification.Notification0\x01BAZ?github.com/paper-social/notification-service/proto/notificationb\x06proto3"
+	"\x10GetNotifications\x12\x14.notification.UserId\x1a\x1a.notification.Notification0\x01BQZOgithub.com/paper-social/notification-service/proto/generated/notification/protob\x06proto3"
 
 var (
 	file_proto_notification_proto_rawDescOnce sync.Once

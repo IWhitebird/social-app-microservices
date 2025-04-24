@@ -9,7 +9,7 @@ import (
 	"fmt"
 
 	graph "github.com/paper-social/notification-service/graph/generated"
-	model "github.com/paper-social/notification-service/graph/model"
+	"github.com/paper-social/notification-service/graph/model"
 	notification "github.com/paper-social/notification-service/proto/generated/notification/proto"
 )
 
@@ -31,12 +31,11 @@ func (r *queryResolver) GetNotifications(ctx context.Context, userID string) ([]
 		}
 
 		notifications = append(notifications, &model.Notification{
-			ID:           notificationProto.Id,
-			UserID:       notificationProto.UserId,
-			PostID:       notificationProto.PostId,
-			PostAuthorID: notificationProto.PostAuthorId,
-			Content:      notificationProto.Content,
-			Read:         notificationProto.Read,
+			ID:      notificationProto.Id,
+			UserID:  notificationProto.UserId,
+			PostID:  notificationProto.PostId,
+			Content: notificationProto.Content,
+			Read:    notificationProto.Read,
 		})
 	}
 

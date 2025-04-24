@@ -40,13 +40,12 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Notification struct {
-		Content      func(childComplexity int) int
-		CreatedAt    func(childComplexity int) int
-		ID           func(childComplexity int) int
-		PostAuthorID func(childComplexity int) int
-		PostID       func(childComplexity int) int
-		Read         func(childComplexity int) int
-		UserID       func(childComplexity int) int
+		Content   func(childComplexity int) int
+		CreatedAt func(childComplexity int) int
+		ID        func(childComplexity int) int
+		PostID    func(childComplexity int) int
+		Read      func(childComplexity int) int
+		UserID    func(childComplexity int) int
 	}
 
 	Query struct {
@@ -93,13 +92,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Notification.ID(childComplexity), true
-
-	case "Notification.postAuthorID":
-		if e.complexity.Notification.PostAuthorID == nil {
-			break
-		}
-
-		return e.complexity.Notification.PostAuthorID(childComplexity), true
 
 	case "Notification.postID":
 		if e.complexity.Notification.PostID == nil {
@@ -235,7 +227,6 @@ type Notification {
   id: ID!
   userID: String!
   postID: String!
-  postAuthorID: String!
   content: String!
   read: Boolean!
   createdAt: String!

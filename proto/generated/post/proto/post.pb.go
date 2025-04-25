@@ -147,7 +147,7 @@ const file_proto_post_proto_rawDesc = "" +
 	"\x14notifications_queued\x18\x03 \x01(\x05R\x13notificationsQueued2D\n" +
 	"\vPostService\x125\n" +
 	"\vPublishPost\x12\n" +
-	".post.Post\x1a\x1a.post.NotificationResponseBIZGgithub.com/paper-social/notification-service/proto/generated/post/protob\x06proto3"
+	".post.Post\x1a\x1a.post.NotificationResponseBKZIgithub.com/iwhitebird/social-app-microservices/proto/generated/post/protob\x06proto3"
 
 var (
 	file_proto_post_proto_rawDescOnce sync.Once

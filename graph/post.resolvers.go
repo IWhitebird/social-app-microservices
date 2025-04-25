@@ -7,9 +7,9 @@ package graph
 import (
 	"context"
 
-	graph "github.com/paper-social/notification-service/graph/generated"
-	"github.com/paper-social/notification-service/graph/model"
-	"github.com/paper-social/notification-service/proto/generated/post/proto"
+	graph "github.com/iwhitebird/social-app-microservices/graph/generated"
+	"github.com/iwhitebird/social-app-microservices/graph/model"
+	"github.com/iwhitebird/social-app-microservices/proto/generated/post/proto"
 )
 
 // PublishPost is the resolver for the publishPost field.

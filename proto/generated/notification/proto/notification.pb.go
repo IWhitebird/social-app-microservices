@@ -231,7 +231,7 @@ const file_proto_notification_proto_rawDesc = "" +
 	"\x15average_delivery_time\x18\x03 \x01(\x01R\x13averageDeliveryTime2\xb2\x01\n" +
 	"\x13NotificationService\x12F\n" +
 	"\x10GetNotifications\x12\x14.notification.UserId\x1a\x1a.notification.Notification0\x01\x12S\n" +
-	"\x16GetNotificationMetrics\x12\x16.google.protobuf.Empty\x1a!.notification.NotificationMetricsBQZOgithub.com/paper-social/notification-service/proto/generated/notification/protob\x06proto3"
+	"\x16GetNotificationMetrics\x12\x16.google.protobuf.Empty\x1a!.notification.NotificationMetricsBSZQgithub.com/iwhitebird/social-app-microservices/proto/generated/notification/protob\x06proto3"
 
 var (
 	file_proto_notification_proto_rawDescOnce sync.Once

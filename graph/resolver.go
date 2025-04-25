@@ -5,8 +5,8 @@ package graph
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 import (
-	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
-	postProto "github.com/paper-social/notification-service/proto/generated/post/proto"
+	notificationProto "github.com/iwhitebird/social-app-microservices/proto/generated/notification/proto"
+	postProto "github.com/iwhitebird/social-app-microservices/proto/generated/post/proto"
 )
 
 type Resolver struct {

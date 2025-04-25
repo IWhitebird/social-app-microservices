@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
-	postProto "github.com/paper-social/notification-service/proto/generated/post/proto"
+	notificationProto "github.com/iwhitebird/social-app-microservices/proto/generated/notification/proto"
+	postProto "github.com/iwhitebird/social-app-microservices/proto/generated/post/proto"
 )
 
 type HttpApi struct {

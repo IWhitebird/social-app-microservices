@@ -8,9 +8,9 @@ import (
 	"context"
 	"fmt"
 
-	graph "github.com/paper-social/notification-service/graph/generated"
-	"github.com/paper-social/notification-service/graph/model"
-	notification "github.com/paper-social/notification-service/proto/generated/notification/proto"
+	graph "github.com/iwhitebird/social-app-microservices/graph/generated"
+	"github.com/iwhitebird/social-app-microservices/graph/model"
+	notification "github.com/iwhitebird/social-app-microservices/proto/generated/notification/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package post;
 
-option go_package = "github.com/paper-social/notification-service/proto/generated/post/proto";
+option go_package = "github.com/iwhitebird/social-app-microservices/proto/generated/post/proto";
 
 service PostService {
     rpc PublishPost(Post) returns (NotificationResponse);

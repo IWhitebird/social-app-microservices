@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/paper-social/notification-service/internal/models"
+	"github.com/iwhitebird/social-app-microservices/internal/models"
 )
 
 type NotificationJob struct {

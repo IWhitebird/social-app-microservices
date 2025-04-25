@@ -1,10 +1,9 @@
 .PHONY: all build run test clean docker docker-run gqlgen update-deps protogen
 
 all: clean build
-
 build:
 	@echo "Building server..."
-	go build -o cmd/server/server cmd/server/main.go
+	CGO_ENABLED=1 go build -o build/server cmd/server/main.go
 
 run:
 	@echo "Running server..."

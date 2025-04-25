@@ -10,7 +10,7 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/paper-social/notification-service/graph/model"
+	"github.com/iwhitebird/social-app-microservices/graph/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -40,7 +40,7 @@ func (ec *executionContext) field_Mutation_publishPost_argsInput(
 ) (model.PublishPostInput, error) {
 	ctx = graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
 	if tmp, ok := rawArgs["input"]; ok {
-		return ec.unmarshalNPublishPostInput2githubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐPublishPostInput(ctx, tmp)
+		return ec.unmarshalNPublishPostInput2githubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐPublishPostInput(ctx, tmp)
 	}
 
 	var zeroVal model.PublishPostInput
@@ -83,7 +83,7 @@ func (ec *executionContext) _Mutation_publishPost(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.PostResponse)
 	fc.Result = res
-	return ec.marshalNPostResponse2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐPostResponse(ctx, field.Selections, res)
+	return ec.marshalNPostResponse2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐPostResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_publishPost(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -579,11 +579,11 @@ func (ec *executionContext) _PostResponse(ctx context.Context, sel ast.Selection
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNPostResponse2githubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐPostResponse(ctx context.Context, sel ast.SelectionSet, v model.PostResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNPostResponse2githubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐPostResponse(ctx context.Context, sel ast.SelectionSet, v model.PostResponse) graphql.Marshaler {
 	return ec._PostResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNPostResponse2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐPostResponse(ctx context.Context, sel ast.SelectionSet, v *model.PostResponse) graphql.Marshaler {
+func (ec *executionContext) marshalNPostResponse2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐPostResponse(ctx context.Context, sel ast.SelectionSet, v *model.PostResponse) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -593,7 +593,7 @@ func (ec *executionContext) marshalNPostResponse2ᚖgithubᚗcomᚋpaperᚑsocia
 	return ec._PostResponse(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPublishPostInput2githubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐPublishPostInput(ctx context.Context, v any) (model.PublishPostInput, error) {
+func (ec *executionContext) unmarshalNPublishPostInput2githubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐPublishPostInput(ctx context.Context, v any) (model.PublishPostInput, error) {
 	res, err := ec.unmarshalInputPublishPostInput(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }

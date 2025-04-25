@@ -6,9 +6,9 @@ import (
 	"log"
 	"sync"
 
-	"github.com/paper-social/notification-service/internal/models"
-	"github.com/paper-social/notification-service/internal/queue"
-	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
+	"github.com/iwhitebird/social-app-microservices/internal/models"
+	"github.com/iwhitebird/social-app-microservices/internal/queue"
+	notificationProto "github.com/iwhitebird/social-app-microservices/proto/generated/notification/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 

@@ -12,7 +12,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/paper-social/notification-service/graph/model"
+	"github.com/iwhitebird/social-app-microservices/graph/model"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -461,7 +461,7 @@ func (ec *executionContext) _Query_getNotifications(ctx context.Context, field g
 	}
 	res := resTmp.([]*model.Notification)
 	fc.Result = res
-	return ec.marshalNNotification2ᚕᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationᚄ(ctx, field.Selections, res)
+	return ec.marshalNNotification2ᚕᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotificationᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotifications(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -528,7 +528,7 @@ func (ec *executionContext) _Query_getNotificationMetrics(ctx context.Context, f
 	}
 	res := resTmp.(*model.NotificationMetrics)
 	fc.Result = res
-	return ec.marshalNNotificationMetrics2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationMetrics(ctx, field.Selections, res)
+	return ec.marshalNNotificationMetrics2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotificationMetrics(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_getNotificationMetrics(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -916,7 +916,7 @@ func (ec *executionContext) marshalNInt642int64(ctx context.Context, sel ast.Sel
 	return res
 }
 
-func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -940,7 +940,7 @@ func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋpaperᚑso
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNNotification2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotification(ctx, sel, v[i])
+			ret[i] = ec.marshalNNotification2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotification(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -960,7 +960,7 @@ func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋpaperᚑso
 	return ret
 }
 
-func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotification(ctx context.Context, sel ast.SelectionSet, v *model.Notification) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -970,11 +970,11 @@ func (ec *executionContext) marshalNNotification2ᚖgithubᚗcomᚋpaperᚑsocia
 	return ec._Notification(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNNotificationMetrics2githubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationMetrics(ctx context.Context, sel ast.SelectionSet, v model.NotificationMetrics) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationMetrics2githubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotificationMetrics(ctx context.Context, sel ast.SelectionSet, v model.NotificationMetrics) graphql.Marshaler {
 	return ec._NotificationMetrics(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNNotificationMetrics2ᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationMetrics(ctx context.Context, sel ast.SelectionSet, v *model.NotificationMetrics) graphql.Marshaler {
+func (ec *executionContext) marshalNNotificationMetrics2ᚖgithubᚗcomᚋiwhitebirdᚋsocialᚑappᚑmicroservicesᚋgraphᚋmodelᚐNotificationMetrics(ctx context.Context, sel ast.SelectionSet, v *model.NotificationMetrics) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

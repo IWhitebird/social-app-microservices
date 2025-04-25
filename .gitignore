@@ -25,4 +25,5 @@ go.work
 bin/
 cmd/server/server
 cmd/client/client 
-build
+build/
+.env

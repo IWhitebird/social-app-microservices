@@ -6,6 +6,7 @@ require (
 	github.com/99designs/gqlgen v0.17.72
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
+	github.com/joho/godotenv v1.5.1
 	github.com/vektah/gqlparser/v2 v2.5.26
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.6

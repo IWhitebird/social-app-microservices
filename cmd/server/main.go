@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"log/slog"
 	"math/rand"
 	"net"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/iwhitebird/social-app-microservices/api"
+	"github.com/iwhitebird/social-app-microservices/internal/config"
 	"github.com/iwhitebird/social-app-microservices/internal/models"
 	"github.com/iwhitebird/social-app-microservices/internal/queue"
 	"github.com/iwhitebird/social-app-microservices/internal/service"
@@ -30,67 +32,75 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-var store *models.Store
+var (
+	store  *models.Store
+	logger *slog.Logger
+)
+
+func init() {
+	logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	slog.SetDefault(logger)
+
+	rand.New(rand.NewSource(time.Now().UnixNano()))
+}
 
 func main() {
-	rand.New(rand.NewSource(time.Now().UnixNano()))
+	cfg, err := config.Load()
+	if err != nil {
+		logger.Error("failed to load config", "error", err)
+		os.Exit(1)
+	}
 
-	// Create store and notification queue first since we need it for all servers
 	store = models.NewStore()
 	store.InitSampleData()
 
-	// Start all servers
-	go RunHTTPServer()
-	go RunGRPCServer()
-	go RunGQlServer()
+	logger.Info("starting servers", "config", cfg)
+
+	if cfg.IsServerEnabled("http") {
+		go RunHTTPServer(cfg)
+	}
+	if cfg.IsServerEnabled("grpc") {
+		go RunGRPCServer(cfg)
+	}
+	if cfg.IsServerEnabled("gql") {
+		go RunGQlServer(cfg)
+	}
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGTSTP)
 
 	<-signalChan
-	log.Println("Shutting down servers...")
-	log.Println("Servers stopped")
+	logger.Info("shutting down servers...")
+	logger.Info("servers stopped")
 }
 
-func RunHTTPServer() {
-	const defaultPort = "3000"
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
-
-	// Set up gRPC connections
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+func RunHTTPServer(cfg *config.Config) {
+	grpcAddr := fmt.Sprintf("%s:%s", cfg.GRPCHost, cfg.GRPCPort)
+	conn, err := grpc.NewClient(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Failed to connect to notification service: %v", err)
+		logger.Error("failed to connect to notification service", "error", err)
+		return
 	}
 	defer conn.Close()
 
 	notificationClient := notificationProto.NewNotificationServiceClient(conn)
 	postClient := postProto.NewPostServiceClient(conn)
 
-	// Create and start the HTTP server
-	server := api.NewHttpApi(notificationClient, postClient, port)
+	server := api.NewHttpApi(notificationClient, postClient, cfg.HTTPPort)
 
-	log.Println("Starting HTTP server on http://localhost:" + port)
+	logger.Info("starting HTTP server", "port", cfg.HTTPPort)
 
 	if err := server.Start(); err != nil {
-		log.Fatalf("Failed to start HTTP server: %v", err)
+		logger.Error("failed to start HTTP server", "error", err)
 	}
-
 }
 
-func RunGQlServer() {
-	const defaultPort = "8080"
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
-	}
-
-	// Set up gRPC connections
-	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+func RunGQlServer(cfg *config.Config) {
+	grpcAddr := fmt.Sprintf("%s:%s", cfg.GRPCHost, cfg.GRPCPort)
+	conn, err := grpc.NewClient(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		log.Fatalf("Failed to connect to notification service: %v", err)
+		logger.Error("failed to connect to services", "error", err)
+		return
 	}
 	defer conn.Close()
 
@@ -104,9 +114,7 @@ func RunGQlServer() {
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
-
 	srv.SetQueryCache(lru.New[*ast.QueryDocument](1000))
-
 	srv.Use(extension.Introspection{})
 	srv.Use(extension.AutomaticPersistedQuery{
 		Cache: lru.New[string](100),
@@ -115,20 +123,21 @@ func RunGQlServer() {
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	logger.Info("starting GraphQL server", "port", cfg.GQLPort, "playground", fmt.Sprintf("http://localhost:%s/", cfg.GQLPort))
+
+	if err := http.ListenAndServe(":"+cfg.GQLPort, nil); err != nil {
+		logger.Error("failed to start GraphQL server", "error", err)
+	}
 }
 
-func RunGRPCServer() {
+func RunGRPCServer(cfg *config.Config) {
 	notificationQueue := queue.NewNotificationQueue(store, 5, 3)
 	notificationQueue.Start()
 	defer notificationQueue.Stop()
 
-	// Create the gRPC services
 	notificationService := service.NewNotificationService(store, notificationQueue)
 	postService := service.NewPostService(store, notificationQueue)
 
-	// Set up the gRPC server
 	grpcServer := grpc.NewServer()
 	defer grpcServer.GracefulStop()
 
@@ -136,15 +145,15 @@ func RunGRPCServer() {
 	postProto.RegisterPostServiceServer(grpcServer, postService)
 	reflection.Register(grpcServer)
 
-	grpcListener, err := net.Listen("tcp", ":50051")
+	grpcListener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
-		log.Fatalf("Failed to listen for gRPC: %v", err)
+		logger.Error("failed to listen for gRPC", "error", err)
+		return
 	}
 
-	log.Println("Starting gRPC server on :50051")
+	logger.Info("starting gRPC server", "port", cfg.GRPCPort)
 
 	if err := grpcServer.Serve(grpcListener); err != nil {
-		log.Fatalf("Failed to serve gRPC: %v", err)
+		logger.Error("failed to serve gRPC", "error", err)
 	}
-
 }

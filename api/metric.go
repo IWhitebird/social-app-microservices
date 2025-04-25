@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -30,7 +29,7 @@ func (s *HttpApi) GetMetrics(c *gin.Context) {
 			"store_metrics": gin.H{
 				"total_notifications_sent": notificationMetrics.TotalNotificationsSent,
 				"failed_attempts":          notificationMetrics.FailedAttempts,
-				"average_delivery_time":    fmt.Sprintf("%dms", int(notificationMetrics.AverageDeliveryTime*1000)),
+				"average_delivery_time":    notificationMetrics.AverageDeliveryTime,
 			},
 			"system_status": "healthy",
 		},

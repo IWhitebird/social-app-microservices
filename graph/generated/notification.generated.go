@@ -327,9 +327,9 @@ func (ec *executionContext) _NotificationMetrics_totalNotificationsSent(ctx cont
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int32)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt2int32(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_NotificationMetrics_totalNotificationsSent(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -339,7 +339,7 @@ func (ec *executionContext) fieldContext_NotificationMetrics_totalNotificationsS
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type Int64 does not have child fields")
 		},
 	}
 	return fc, nil
@@ -371,9 +371,9 @@ func (ec *executionContext) _NotificationMetrics_failedAttempts(ctx context.Cont
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int32)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt2int32(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_NotificationMetrics_failedAttempts(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -383,7 +383,7 @@ func (ec *executionContext) fieldContext_NotificationMetrics_failedAttempts(_ co
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type Int does not have child fields")
+			return nil, errors.New("field of type Int64 does not have child fields")
 		},
 	}
 	return fc, nil
@@ -900,6 +900,21 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
+
+func (ec *executionContext) unmarshalNInt642int64(ctx context.Context, v any) (int64, error) {
+	res, err := graphql.UnmarshalInt64(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNInt642int64(ctx context.Context, sel ast.SelectionSet, v int64) graphql.Marshaler {
+	res := graphql.MarshalInt64(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
 
 func (ec *executionContext) marshalNNotification2ᚕᚖgithubᚗcomᚋpaperᚑsocialᚋnotificationᚑserviceᚋgraphᚋmodelᚐNotificationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Notification) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))

@@ -351,7 +351,9 @@ input PublishPostInput {
   userID: String!
   content: String!
 } `, BuiltIn: false},
-	{Name: "../gql/notification.graphql", Input: `type Query {
+	{Name: "../gql/notification.graphql", Input: `scalar Int64
+
+type Query {
   getNotifications(userID: String!): [Notification!]!
   getNotificationMetrics: NotificationMetrics!
 }
@@ -365,8 +367,8 @@ type Notification {
 } 
 
 type NotificationMetrics {
-  totalNotificationsSent: Int!
-  failedAttempts: Int!
+  totalNotificationsSent: Int64!
+  failedAttempts: Int64!
   averageDeliveryTime: Float!
 }`, BuiltIn: false},
 }

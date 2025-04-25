@@ -1,3 +1,5 @@
+scalar Int64
+
 type Query {
   getNotifications(userID: String!): [Notification!]!
   getNotificationMetrics: NotificationMetrics!
@@ -12,7 +14,7 @@ type Notification {
 } 
 
 type NotificationMetrics {
-  totalNotificationsSent: Int!
-  failedAttempts: Int!
+  totalNotificationsSent: Int64!
+  failedAttempts: Int64!
   averageDeliveryTime: Float!
 }

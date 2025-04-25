@@ -45,14 +45,14 @@ func (r *queryResolver) GetNotifications(ctx context.Context, userID string) ([]
 
 // GetNotificationMetrics is the resolver for the getNotificationMetrics field.
 func (r *queryResolver) GetNotificationMetrics(ctx context.Context) (*model.NotificationMetrics, error) {
-	metrics, err := r.notificationClient.GetNotificationMetrics(ctx, &emptypb.Empty{})
+	notificationMetrics, err := r.notificationClient.GetNotificationMetrics(ctx, &emptypb.Empty{})
 	if err != nil {
 		return nil, err
 	}
 	return &model.NotificationMetrics{
-		TotalNotificationsSent: int32(metrics.TotalNotificationsSent),
-		FailedAttempts:         int32(metrics.FailedAttempts),
-		AverageDeliveryTime:    metrics.AverageDeliveryTime,
+		TotalNotificationsSent: notificationMetrics.TotalNotificationsSent,
+		FailedAttempts:         notificationMetrics.FailedAttempts,
+		AverageDeliveryTime:    notificationMetrics.AverageDeliveryTime,
 	}, nil
 }
 

@@ -14,8 +14,8 @@ type Notification struct {
 }
 
 type NotificationMetrics struct {
-	TotalNotificationsSent int32   `json:"totalNotificationsSent"`
-	FailedAttempts         int32   `json:"failedAttempts"`
+	TotalNotificationsSent int64   `json:"totalNotificationsSent"`
+	FailedAttempts         int64   `json:"failedAttempts"`
 	AverageDeliveryTime    float64 `json:"averageDeliveryTime"`
 }
 

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"sync"
@@ -8,6 +9,7 @@ import (
 	"github.com/paper-social/notification-service/internal/models"
 	"github.com/paper-social/notification-service/internal/queue"
 	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // NotificationService implements the gRPC notification service
@@ -61,4 +63,13 @@ func (s *NotificationService) GetNotifications(userId *notificationProto.UserId,
 	}
 
 	return nil
+}
+
+func (s *NotificationService) GetNotificationMetrics(ctx context.Context, in *emptypb.Empty) (*notificationProto.NotificationMetrics, error) {
+	notificationMetrics := &notificationProto.NotificationMetrics{
+		TotalNotificationsSent: int64(s.store.Metrics.TotalNotificationsSent),
+		FailedAttempts:         int64(s.store.Metrics.FailedAttempts),
+		AverageDeliveryTime:    float64(s.store.Metrics.AverageDeliveryTime),
+	}
+	return notificationMetrics, nil
 }

@@ -59,9 +59,21 @@ func RunHTTPServer() {
 		port = defaultPort
 	}
 
+	// Set up gRPC connections
+	conn, err := grpc.NewClient("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Fatalf("Failed to connect to notification service: %v", err)
+	}
+	defer conn.Close()
+
+	notificationClient := notificationProto.NewNotificationServiceClient(conn)
+	postClient := postProto.NewPostServiceClient(conn)
+
 	// Create and start the HTTP server
-	server := api.NewHttpApi(store, port)
+	server := api.NewHttpApi(notificationClient, postClient, port)
+
 	log.Println("Starting HTTP server on http://localhost:" + port)
+
 	if err := server.Start(); err != nil {
 		log.Fatalf("Failed to start HTTP server: %v", err)
 	}

@@ -53,6 +53,12 @@ type ComplexityRoot struct {
 		UserID  func(childComplexity int) int
 	}
 
+	NotificationMetrics struct {
+		AverageDeliveryTime    func(childComplexity int) int
+		FailedAttempts         func(childComplexity int) int
+		TotalNotificationsSent func(childComplexity int) int
+	}
+
 	Post struct {
 		Content func(childComplexity int) int
 		ID      func(childComplexity int) int
@@ -66,7 +72,8 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		GetNotifications func(childComplexity int, userID string) int
+		GetNotificationMetrics func(childComplexity int) int
+		GetNotifications       func(childComplexity int, userID string) int
 	}
 }
 
@@ -136,6 +143,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Notification.UserID(childComplexity), true
 
+	case "NotificationMetrics.averageDeliveryTime":
+		if e.complexity.NotificationMetrics.AverageDeliveryTime == nil {
+			break
+		}
+
+		return e.complexity.NotificationMetrics.AverageDeliveryTime(childComplexity), true
+
+	case "NotificationMetrics.failedAttempts":
+		if e.complexity.NotificationMetrics.FailedAttempts == nil {
+			break
+		}
+
+		return e.complexity.NotificationMetrics.FailedAttempts(childComplexity), true
+
+	case "NotificationMetrics.totalNotificationsSent":
+		if e.complexity.NotificationMetrics.TotalNotificationsSent == nil {
+			break
+		}
+
+		return e.complexity.NotificationMetrics.TotalNotificationsSent(childComplexity), true
+
 	case "Post.content":
 		if e.complexity.Post.Content == nil {
 			break
@@ -177,6 +205,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.PostResponse.Success(childComplexity), true
+
+	case "Query.getNotificationMetrics":
+		if e.complexity.Query.GetNotificationMetrics == nil {
+			break
+		}
+
+		return e.complexity.Query.GetNotificationMetrics(childComplexity), true
 
 	case "Query.getNotifications":
 		if e.complexity.Query.GetNotifications == nil {
@@ -318,6 +353,7 @@ input PublishPostInput {
 } `, BuiltIn: false},
 	{Name: "../gql/notification.graphql", Input: `type Query {
   getNotifications(userID: String!): [Notification!]!
+  getNotificationMetrics: NotificationMetrics!
 }
 
 type Notification {
@@ -326,6 +362,12 @@ type Notification {
   postID: String!
   content: String!
   read: Boolean!
-} `, BuiltIn: false},
+} 
+
+type NotificationMetrics {
+  totalNotificationsSent: Int!
+  failedAttempts: Int!
+  averageDeliveryTime: Float!
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

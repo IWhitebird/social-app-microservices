@@ -1,6 +1,7 @@
 package models
 
 import (
+	"sync"
 	"time"
 )
 
@@ -54,6 +55,9 @@ type Store struct {
 
 	//Metrics Singleton
 	Metrics *NotificationMetrics
+
+	//Mutex for thread safety
+	Mu sync.Mutex
 }
 
 func NewStore() *Store {
@@ -62,6 +66,7 @@ func NewStore() *Store {
 		Posts:         make(map[string]*Post),
 		Notifications: make(map[string][]*Notification),
 		Metrics:       &NotificationMetrics{},
+		Mu:            sync.Mutex{},
 	}
 }
 

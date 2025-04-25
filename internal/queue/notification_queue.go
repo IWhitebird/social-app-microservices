@@ -9,23 +9,21 @@ import (
 	"github.com/paper-social/notification-service/internal/models"
 )
 
-// NotificationJob represents a job to send a notification
 type NotificationJob struct {
 	Notification *models.Notification
 	Attempt      int
 }
 
-// NotificationQueue handles the queue of notifications to be sent
 type NotificationQueue struct {
 	jobs         chan NotificationJob
 	store        *models.Store
 	workerCount  int
 	maxRetries   int
-	wg           sync.WaitGroup
 	shutdownChan chan struct{}
+	wg           sync.WaitGroup
+	mu           sync.Mutex
 }
 
-// NewNotificationQueue creates a new notification queue
 func NewNotificationQueue(store *models.Store, workerCount, maxRetries int) *NotificationQueue {
 	return &NotificationQueue{
 		jobs:         make(chan NotificationJob, 1000), // Buffer size of 1000
@@ -33,26 +31,24 @@ func NewNotificationQueue(store *models.Store, workerCount, maxRetries int) *Not
 		workerCount:  workerCount,
 		maxRetries:   maxRetries,
 		shutdownChan: make(chan struct{}),
+		mu:           sync.Mutex{},
 	}
 }
 
-// Start starts the notification queue workers
 func (q *NotificationQueue) Start() {
 	log.Printf("Starting %d notification workers", q.workerCount)
-	for i := 0; i < q.workerCount; i++ {
+	for i := range make([]struct{}, q.workerCount) {
 		q.wg.Add(1)
 		go q.worker(i)
 	}
 }
 
-// Stop stops the notification queue
 func (q *NotificationQueue) Stop() {
 	close(q.shutdownChan)
 	q.wg.Wait()
 	log.Println("Notification queue stopped")
 }
 
-// EnqueueNotification adds a notification to the queue
 func (q *NotificationQueue) EnqueueNotification(notification *models.Notification) {
 	q.jobs <- NotificationJob{
 		Notification: notification,
@@ -60,7 +56,6 @@ func (q *NotificationQueue) EnqueueNotification(notification *models.Notificatio
 	}
 }
 
-// worker processes notifications from the queue
 func (q *NotificationQueue) worker(id int) {
 	defer q.wg.Done()
 	log.Printf("Worker %d started", id)
@@ -74,12 +69,22 @@ func (q *NotificationQueue) worker(id int) {
 
 			timeTakenToDeliver := time.Since(startTime)
 
+			q.store.Mu.Lock()
 			if success {
-				q.store.Metrics.AverageDeliveryTime = (q.store.Metrics.AverageDeliveryTime*float64(q.store.Metrics.TotalNotificationsSent-1) + float64(timeTakenToDeliver)) / float64(q.store.Metrics.TotalNotificationsSent)
+				if q.store.Metrics.TotalNotificationsSent == 0 {
+					// First successful notification
+					q.store.Metrics.AverageDeliveryTime = float64(timeTakenToDeliver)
+				} else {
+					// Update running average
+					q.store.Metrics.AverageDeliveryTime =
+						(q.store.Metrics.AverageDeliveryTime*float64(q.store.Metrics.TotalNotificationsSent) +
+							float64(timeTakenToDeliver)) / float64(q.store.Metrics.TotalNotificationsSent+1)
+				}
 				q.store.Metrics.TotalNotificationsSent++
 			} else {
 				q.store.Metrics.FailedAttempts++
 			}
+			q.store.Mu.Unlock()
 
 		case <-q.shutdownChan:
 			log.Printf("Worker %d shutting down", id)
@@ -88,7 +93,6 @@ func (q *NotificationQueue) worker(id int) {
 	}
 }
 
-// processNotification attempts to send a notification with retry logic
 func (q *NotificationQueue) processNotification(job NotificationJob) bool {
 	notification := job.Notification
 	attempt := job.Attempt
@@ -121,11 +125,14 @@ func (q *NotificationQueue) processNotification(job NotificationJob) bool {
 		notification.UserID, notification.PostID)
 
 	// Store notification in user's list
+
+	q.store.Mu.Lock()
 	userID := notification.UserID
 	if _, exists := q.store.Notifications[userID]; !exists {
 		q.store.Notifications[userID] = []*models.Notification{}
 	}
 	q.store.Notifications[userID] = append(q.store.Notifications[userID], notification)
+	q.store.Mu.Unlock()
 
 	return true
 }

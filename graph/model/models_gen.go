@@ -13,6 +13,12 @@ type Notification struct {
 	Read    bool   `json:"read"`
 }
 
+type NotificationMetrics struct {
+	TotalNotificationsSent int32   `json:"totalNotificationsSent"`
+	FailedAttempts         int32   `json:"failedAttempts"`
+	AverageDeliveryTime    float64 `json:"averageDeliveryTime"`
+}
+
 type Post struct {
 	ID      string `json:"id"`
 	UserID  string `json:"userID"`

@@ -11,6 +11,7 @@ import (
 	graph "github.com/paper-social/notification-service/graph/generated"
 	"github.com/paper-social/notification-service/graph/model"
 	notification "github.com/paper-social/notification-service/proto/generated/notification/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // GetNotifications is the resolver for the getNotifications field.
@@ -40,6 +41,19 @@ func (r *queryResolver) GetNotifications(ctx context.Context, userID string) ([]
 	}
 
 	return notifications, nil
+}
+
+// GetNotificationMetrics is the resolver for the getNotificationMetrics field.
+func (r *queryResolver) GetNotificationMetrics(ctx context.Context) (*model.NotificationMetrics, error) {
+	metrics, err := r.notificationClient.GetNotificationMetrics(ctx, &emptypb.Empty{})
+	if err != nil {
+		return nil, err
+	}
+	return &model.NotificationMetrics{
+		TotalNotificationsSent: int32(metrics.TotalNotificationsSent),
+		FailedAttempts:         int32(metrics.FailedAttempts),
+		AverageDeliveryTime:    metrics.AverageDeliveryTime,
+	}, nil
 }
 
 // Query returns graph.QueryResolver implementation.

@@ -4,36 +4,34 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"github.com/paper-social/notification-service/internal/models"
+	notificationProto "github.com/paper-social/notification-service/proto/generated/notification/proto"
+	postProto "github.com/paper-social/notification-service/proto/generated/post/proto"
 )
 
 type HttpApi struct {
-	engine *gin.Engine
-	store  *models.Store
-	port   string
+	engine             *gin.Engine
+	port               string
+	notificationClient notificationProto.NotificationServiceClient
+	postClient         postProto.PostServiceClient
 }
 
-func NewHttpApi(store *models.Store, port string) *HttpApi {
+func NewHttpApi(notificationClient notificationProto.NotificationServiceClient, postClient postProto.PostServiceClient, port string) *HttpApi {
 	gin.SetMode(gin.ReleaseMode)
 	server := &HttpApi{
-		engine: gin.Default(),
-		store:  store,
-		port:   port,
+		engine:             gin.Default(),
+		port:               port,
+		notificationClient: notificationClient,
+		postClient:         postClient,
 	}
-	server.setupMiddleware()
+	server.engine.Use(gin.Recovery())
+	server.engine.Use(gin.Logger())
 	server.setupRoutes()
-	return server
-}
 
-func (s *HttpApi) setupMiddleware() {
-	s.engine.Use(gin.Recovery())
-	s.engine.Use(gin.Logger())
+	return server
 }
 
 func (s *HttpApi) setupRoutes() {
 	api := s.engine.Group("/api")
-
-	// Register metric routes
 	s.RegisterMetricRoutes(api)
 }
 

@@ -1,5 +1,6 @@
 type Query {
   getNotifications(userID: String!): [Notification!]!
+  getNotificationMetrics: NotificationMetrics!
 }
 
 type Notification {
@@ -9,3 +10,9 @@ type Notification {
   content: String!
   read: Boolean!
 } 
+
+type NotificationMetrics {
+  totalNotificationsSent: Int!
+  failedAttempts: Int!
+  averageDeliveryTime: Float!
+}

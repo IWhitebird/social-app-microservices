@@ -60,7 +60,7 @@ func (s *PostService) PublishPost(ctx context.Context, post *postProto.Post) (*p
 			ID:        uuid.New().String(),
 			UserID:    followerID,
 			PostID:    internalPost.ID,
-			Content:   fmt.Sprintf("%s posted: %s", post.UserId, TruncateContent(post.Content, 50)),
+			Content:   fmt.Sprintf("%s posted: %s", post.UserId, post.Content),
 			Read:      false,
 			CreatedAt: time.Now(),
 		}

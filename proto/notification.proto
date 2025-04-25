@@ -1,12 +1,14 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
+
 package notification;
 
 option go_package = "github.com/paper-social/notification-service/proto/generated/notification/proto";
 
-
 service NotificationService {
   rpc GetNotifications(UserId) returns (stream Notification);
+  rpc GetNotificationMetrics(google.protobuf.Empty) returns (NotificationMetrics);
 }
 
 message UserId {
@@ -20,4 +22,10 @@ message Notification {
   string content = 4;
   bool read = 5;
   int64 created_at = 6;
+}
+
+message NotificationMetrics {
+  int64 total_notifications_sent = 1;
+  int64 failed_attempts = 2;
+  double average_delivery_time = 3;
 }

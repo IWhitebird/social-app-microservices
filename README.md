@@ -101,6 +101,44 @@ make docker-run
 - Playground: http://localhost:8080/
 - Endpoint: http://localhost:8080/query
 
+You can run this queries in on graphql playground 
+
+```
+query GetNotifications($userID: String!) {
+  getNotifications(userID: $userID) {
+    id
+    userID
+    postID
+    content
+    read
+  }
+}
+```
+
+```
+mutation publishPost {
+  publishPost(input: {
+    userID: "u1",
+    content: "myfirst post"
+  }) {
+		success
+    message
+    notificationsQueued
+  }
+}
+```
+
+```
+query GetNotificationMetrics {
+  getNotificationMetrics {
+		totalNotificationsSent
+    failedAttempts
+    averageDeliveryTime
+  }
+}
+```
+
+
 ### gRPC
 - Service running on port 50051
 - `PublishPost` - Publish a post and send corresponding notifications

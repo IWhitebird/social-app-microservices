@@ -1,4 +1,4 @@
-.PHONY: all build run test clean docker docker-run gqlgen update-deps protogen
+.PHONY: all build run test clean docker docker-run gqlgen update-deps protogen test
 
 all: clean build
 build:
@@ -11,7 +11,7 @@ run:
 
 test:
 	@echo "Running tests..."
-	go test ./... -v
+	go test ./internal/... -v
 
 docker:
 	@echo "Building Docker image..."

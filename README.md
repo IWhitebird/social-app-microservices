@@ -1,17 +1,13 @@
 # Go Notification Service
 
-A modern, scalable notification system built with Go that provides real-time notifications for social applications through a multi-protocol architecture.
+A modern, scalable microservice architecture with golang. for highly scalable systems with realtime noitfication.
 
 ## 🌟 Features
 
-- **Real-time notifications** via gRPC streaming
-- **Multi-protocol support**: RESTful API, GraphQL, and gRPC
-- **Efficient notification queue** with configurable workers and retry mechanism
-- **Metrics collection** for performance monitoring
-- **Dockerized** for easy deployment
-- **Easily extendable** for various notification types
+- Business Layer with GRPC Server and scalaable via - mciroservices.
+- GraphQL and REST Api Layyer for communationbn between business layera and user
 
-## 🏗️ Architecture
+## 🏗️ Basic Architecture
 
 This project follows a microservice architecture with a focus on performance and scalability:
 
@@ -33,62 +29,46 @@ This project follows a microservice architecture with a focus on performance and
 └────────────────┘ └──────────────────┘
 ```
 
-The architecture uses:
-- **gRPC** for efficient internal service communication
-- **Protocol Buffers** for compact, type-safe data serialization
-- **GraphQL** for flexible data fetching
-- **REST API** for traditional HTTP endpoints
-- **In-memory queue** for reliable notification delivery
-
 ## 📁 Project Structure
 
 ```
-├── api/                  # HTTP API implementation
+├── api/                  # Rest Api
 ├── cmd/                  # Application entry points
 │   └── server/           # Main server application
 ├── graph/                # GraphQL implementation (using gqlgen)
-│   ├── generated/        # Auto-generated GraphQL code
-│   ├── model/            # GraphQL data models
-│   └── resolvers/        # GraphQL resolvers
+│   ├── generated/        # Auto-generated GraphQL code (Auto Generated)
+│   ├── model/            # GraphQL data models (Auto Generated)
+│   ├── gql/              # Graphql schema files which will be used for generating other graphql definations. 
+│   └── /                 # GraphQL resolvers
 ├── internal/             # Private application code
-│   ├── models/           # Data models
+│   ├── models/           # Data model / Store
+│   ├── config/           # Env & Config
 │   ├── queue/            # Notification queue implementation
 │   └── service/          # gRPC service implementations
 ├── proto/                # Protocol Buffer definitions
 │   └── generated/        # Generated gRPC code
-├── build/                # Compiled application
-├── Dockerfile            # Docker container definition
-├── Makefile              # Build automation
-└── go.mod, go.sum        # Go module dependencies
+│   └── /                 # Proto Definations
 ```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Go 1.20 or higher
-- Docker (optional, for containerized deployment)
+- Go 1.24
 - Protocol Buffers compiler (for development)
 
-### Installation
+### For running the project
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/go-notification.git
-   cd go-notification
-   ```
+1. Clone the repository / Extract from zip:
+
+2. Copy .env.example file to .env
 
 2. Install dependencies:
    ```bash
    go mod download
    ```
 
-3. Build the application:
-   ```bash
-   make build
-   ```
-
-4. Run the server:
+3. Run the server:
    ```bash
    make run
    ```
@@ -102,11 +82,10 @@ make docker
 make docker-run
 ```
 
-## 🔌 API Endpoints
+## 🔌 API Endpoints (With provided env file)
 
 ### REST API
-- `GET /api/notifications/:userId` - Get notifications for a user
-- `GET /api/metrics` - Get notification metrics
+- `GET http://localhost:3000/api/metrics` - Get notification metrics
 
 ### GraphQL
 - Playground: http://localhost:8080/
@@ -135,10 +114,28 @@ make gqlgen
 ### Running Tests
 
 ```bash
+# Run all tests
 make test
+
+# Run unit tests only
+make test-unit
+
+# Run integration tests only 
+make test-integration
+
+# Run benchmarks
+make test-bench
+
+# Run all test types
+make test-all
+
+# Generate test coverage report
+make test-coverage
 ```
 
-## 🔄 Trade-offs and Design Decisions
+For more details about testing, see the [test documentation](test/README.md).
+
+## 🔄 Design Decisions
 
 ### In-memory Storage
 The current implementation uses in-memory storage for simplicity, which means data isn't persistent across restarts. In a production environment, you'd want to replace this with a proper database.
@@ -151,9 +148,3 @@ Supporting multiple protocols (REST, GraphQL, gRPC) increases complexity but pro
 
 ### Error Handling
 The notification queue includes retry logic for failed deliveries, balancing reliability with performance. The exact retry strategy can be customized as needed.
-
-## 📊 Performance Considerations
-
-- The gRPC streaming approach minimizes network overhead for real-time notifications
-- The worker pool in the notification queue prevents system overload during spikes
-- Connection pooling is used for efficient resource management

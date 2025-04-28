@@ -97,6 +97,9 @@ func (q *NotificationQueue) processNotification(job NotificationJob) bool {
 	notification := job.Notification
 	attempt := job.Attempt
 
+	//random delay betweek 20 to 100 ms for simulating network latency
+	time.Sleep(time.Duration(rand.Intn(80)+20) * time.Millisecond)
+
 	// Simulate delivery with 10% failure rate
 	if rand.Float64() < 0.1 {
 		log.Printf("Failed to send notification to user %s for post %s (attempt %d)",

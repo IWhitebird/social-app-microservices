@@ -1,13 +1,13 @@
 .PHONY: all build run test clean docker docker-run gqlgen update-deps protogen test
 
-all: clean build
 build:
 	@echo "Building server..."
 	CGO_ENABLED=1 go build -o build/server cmd/server/main.go
 
 run:
 	@echo "Running server..."
-	go run cmd/server/main.go
+	@ARGS=$(wordlist 2,2,$(MAKECMDGOALS)); \
+	go run cmd/server/main.go $$ARGS
 
 test:
 	@echo "Running tests..."
@@ -42,7 +42,6 @@ gqlgen:
 update-deps:
 	go mod tidy
 
-# Allow passing arguments to protogen
 %:
 	@:
 

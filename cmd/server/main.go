@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"log/slog"
+	"log"
 	"math/rand"
 	"net"
 	"net/http"
@@ -34,12 +34,11 @@ import (
 
 var (
 	store  *models.Store
-	logger *slog.Logger
+	logger *log.Logger
 )
 
 func init() {
-	logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	slog.SetDefault(logger)
+	logger = log.New(os.Stdout, "", log.LstdFlags)
 
 	rand.New(rand.NewSource(time.Now().UnixNano()))
 }
@@ -47,38 +46,46 @@ func init() {
 func main() {
 	cfg, err := config.Load()
 	if err != nil {
-		logger.Error("failed to load config", "error", err)
+		logger.Println("failed to load config", "error", err)
 		os.Exit(1)
 	}
 
 	store = models.NewStore()
 	store.InitSampleData()
 
-	logger.Info("starting servers", "config", cfg)
+	logger.Println("starting servers", "config", cfg)
 
 	if cfg.IsServerEnabled("http") {
+		logger.Println("starting HTTP server")
 		go RunHTTPServer(cfg)
 	}
 	if cfg.IsServerEnabled("grpc") {
+		logger.Println("starting GRPC server")
 		go RunGRPCServer(cfg)
 	}
-	if cfg.IsServerEnabled("gql") {
+	if cfg.IsServerEnabled("graphql") {
+		logger.Println("starting GraphQL server")
 		go RunGQlServer(cfg)
+	}
+
+	// If not a single server is enabled, run all servers
+	if !cfg.IsServerEnabled("http") && !cfg.IsServerEnabled("grpc") && !cfg.IsServerEnabled("graphql") {
+		logger.Println("no servers enabled, running all servers")
 	}
 
 	signalChan := make(chan os.Signal, 1)
 	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM, syscall.SIGTSTP)
 
 	<-signalChan
-	logger.Info("shutting down servers...")
-	logger.Info("servers stopped")
+	logger.Println("shutting down servers...")
+	logger.Println("servers stopped")
 }
 
 func RunHTTPServer(cfg *config.Config) {
 	grpcAddr := fmt.Sprintf("%s:%s", cfg.GRPCHost, cfg.GRPCPort)
 	conn, err := grpc.NewClient(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		logger.Error("failed to connect to notification service", "error", err)
+		logger.Println("failed to connect to notification service", "error", err)
 		return
 	}
 	defer conn.Close()
@@ -88,10 +95,10 @@ func RunHTTPServer(cfg *config.Config) {
 
 	server := api.NewHttpApi(notificationClient, postClient, cfg.HTTPPort)
 
-	logger.Info("starting HTTP server", "port", cfg.HTTPPort)
+	logger.Println("starting HTTP server", "port", cfg.HTTPPort)
 
 	if err := server.Start(); err != nil {
-		logger.Error("failed to start HTTP server", "error", err)
+		logger.Println("failed to start HTTP server", "error", err)
 	}
 }
 
@@ -99,7 +106,7 @@ func RunGQlServer(cfg *config.Config) {
 	grpcAddr := fmt.Sprintf("%s:%s", cfg.GRPCHost, cfg.GRPCPort)
 	conn, err := grpc.NewClient(grpcAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		logger.Error("failed to connect to services", "error", err)
+		logger.Println("failed to connect to services", "error", err)
 		return
 	}
 	defer conn.Close()
@@ -123,10 +130,10 @@ func RunGQlServer(cfg *config.Config) {
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
-	logger.Info("starting GraphQL server", "port", cfg.GQLPort, "playground", fmt.Sprintf("http://localhost:%s/", cfg.GQLPort))
+	logger.Println("starting GraphQL server", "port", cfg.GQLPort, "playground", fmt.Sprintf("http://localhost:%s/", cfg.GQLPort))
 
 	if err := http.ListenAndServe(":"+cfg.GQLPort, nil); err != nil {
-		logger.Error("failed to start GraphQL server", "error", err)
+		logger.Println("failed to start GraphQL server", "error", err)
 	}
 }
 
@@ -147,13 +154,13 @@ func RunGRPCServer(cfg *config.Config) {
 
 	grpcListener, err := net.Listen("tcp", ":"+cfg.GRPCPort)
 	if err != nil {
-		logger.Error("failed to listen for gRPC", "error", err)
+		logger.Println("failed to listen for gRPC", "error", err)
 		return
 	}
 
-	logger.Info("starting gRPC server", "port", cfg.GRPCPort)
+	logger.Println("starting gRPC server", "port", cfg.GRPCPort)
 
 	if err := grpcServer.Serve(grpcListener); err != nil {
-		logger.Error("failed to serve gRPC", "error", err)
+		logger.Println("failed to serve gRPC", "error", err)
 	}
 }

@@ -43,8 +43,15 @@ func (s *NotificationService) GetNotifications(userId *notificationProto.UserId,
 		return nil
 	}
 
+	// Get the 20 most recent notifications
+	startIdx := 0
+	if len(userNotifications) > 20 {
+		startIdx = len(userNotifications) - 20
+	}
+	recentNotifications := userNotifications[startIdx:]
+
 	// Send each notification to the client
-	for _, notification := range userNotifications {
+	for _, notification := range recentNotifications {
 		// Convert internal notification to proto notification
 		protoNotification := &notificationProto.Notification{
 			Id:        notification.ID,

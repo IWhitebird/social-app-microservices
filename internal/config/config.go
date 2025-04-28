@@ -1,7 +1,7 @@
 package config
 
 import (
-	"flag"
+	"fmt"
 	"os"
 	"strings"
 
@@ -30,17 +30,25 @@ func Load() (*Config, error) {
 		EnabledSrvs: make(map[string]bool),
 	}
 
-	servers := flag.String("servers", "all", "Comma-separated list of servers to run (http,gql,grpc,all)")
-	flag.Parse()
-
-	if *servers == "all" {
-		cfg.EnabledSrvs["http"] = true
-		cfg.EnabledSrvs["gql"] = true
-		cfg.EnabledSrvs["grpc"] = true
-	} else {
-		for _, srv := range strings.Split(*servers, ",") {
-			cfg.EnabledSrvs[strings.TrimSpace(srv)] = true
+	// Get servers from command line args
+	args := os.Args[1:]
+	fmt.Println("args", args)
+	if len(args) > 0 {
+		servers := args[0]
+		if servers == "all" {
+			cfg.EnabledSrvs["http"] = true
+			cfg.EnabledSrvs["graphql"] = true
+			cfg.EnabledSrvs["grpc"] = true
+		} else {
+			for _, srv := range strings.Split(servers, ",") {
+				cfg.EnabledSrvs[strings.TrimSpace(srv)] = true
+			}
 		}
+	} else {
+		// Default to all servers if no args provided
+		cfg.EnabledSrvs["http"] = false
+		cfg.EnabledSrvs["graphql"] = false
+		cfg.EnabledSrvs["grpc"] = false
 	}
 
 	return cfg, nil

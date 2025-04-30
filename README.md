@@ -121,7 +121,7 @@ mutation publishPost {
     userID: "u1",
     content: "myfirst post"
   }) {
-		success
+    success
     message
     notificationsQueued
   }
@@ -131,7 +131,7 @@ mutation publishPost {
 ```
 query GetNotificationMetrics {
   getNotificationMetrics {
-		totalNotificationsSent
+    totalNotificationsSent
     failedAttempts
     averageDeliveryTime
   }
